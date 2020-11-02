@@ -1,0 +1,275 @@
+{
+  paggingOption: {
+    limit: 20
+  },
+  logger: {
+    debug_log_path: '/usr/app/logs/server-2/debug.log',
+    error_log_path: '/usr/app/logs/server-2/error.log',
+    log_service_name: 'smart-reception',
+    aws_log_type: 'EC2'
+  },
+  uploadFile: {
+    UPLOAD_FOLDER: '/usr/app/uploads/',
+    TEMP_FOLDER: '/usr/app/uploads/',
+    EXTRACT_FOLDER: '/tmp/extracts',
+    STORE_FILE_FOLDER: '/upload_data/save/',
+    INFORMATION_FILE: 'information',
+    IMAGE_EXTENSION: [
+      '.jpg',
+      '.png',
+      '.jpeg'
+    ],
+  },
+  publicConfig: {
+    FOLDER_IMAGES: '/usr/app/files/images',
+    STORE_URL: 'https://ec2-54-178-74-150.ap-northeast-1.compute.amazonaws.com/images',
+    FOLDER_QRCODE: 'https://ec2-54-178-74-150.ap-northeast-1.compute.amazonaws.com/qrcodes',
+  },
+  meetingOption: {
+    meeting_company: 'Fabbi JSC'
+  },
+  meetingStatus: {
+    WAITING_CONFIRM: 0,
+    CONFIRMED: 1,
+    CHECKIN: 2,
+    FINISHED: 3,
+    CANCELLED: 4,
+    NEW: 5
+  },
+  mailContent: {
+    registerComplete: {
+      en: {
+        subject: 'Your account in __systemname has been created',
+        content: '<p><strong>Dear __name</strong></p><p></p><p>We have been created an account with </p><p>Email: __email</p><p>Password: __password</p><p>You can login and change password at <a href="__host/change-password">__host/change-password</a></p><p></p><p>Best,</p><p>__systemname</p>',
+      },
+      ja: {
+        subject: 'アカウント作成完了のお知らせ。',
+        content: '<p><strong>__name 様へ、</strong></p><p></p><p>いつもサービスをご利用していただき、誠にありがとうございます。</p><p>アカウント情報は以下になります。</p><p>ご確認してください。</p><p>メール: __email</p><p>パスワード: __password</p><p>下記のURLでログインとパスワード変更をお願いいたします。</p><a href="__host/change-password">__host/change-password</a><p></p><p></p><p>以上、よろしくお願い申し開けます。</p>',
+      }
+    },
+    changePasswordComplete: {
+      en: {
+        subject: 'Your password in __systemname has been changed',
+        content: '<p><strong>Dear __name</strong></p><p></p><p>We have been changed your password with </p><p>Email: __email</p><p>Password: __password</p><p>You can login and change password at <a href="__host/change-password">__host/change-password</a></p><p></p><p>Best,</p><p>__systemname</p>',
+      },
+      ja: {
+        subject: 'パスワード変更のおしらせ！',
+        content: '<p><strong>__name 様へ、</strong></p><p></p><p>いつもサービスをご利用していただき、誠にありがとうございます。 </p><p>ご利用しているパスワードが変更されましたので、お知らせします。</p><p>メール: __email</p><p>パスワード: __password</p><p>下記のURLでログインとパスワード変更をお願いいたします。</p><a href="__host/change-password">__host/change-password</a><p></p><p></p><p>以上、よろしくお願い申し開けます。</p>',
+      }
+    },
+    registerMeeting: {
+      en: {
+        subject: '【__meetingName】お打ち合わせのご確認',
+        content: '<strong>__customer</strong>様、<br/><br/> いつもお世話になっております。<br/>会社<strong>__companyName</strong>の<strong>__creator</strong>でございます。<br/><br/>お電話でご相談させて頂きました、<strong>__meetingName</strong>に関するお打ち合わせの詳細を下記のリンクをご確認していただければと思います。<br/><br/> ■お打ち合わせの情報<br/>__url<br/><br/>なお、ご不明な点やご質問などございましたら、<strong>__creator</strong>連絡先までお問い合わせ頂けましたら幸甚でございます。',
+      },
+      ja: {
+        subject: '【__meetingName】お打ち合わせのご確認',
+        content: '<strong>__customer</strong>様、<br/><br/> いつもお世話になっております。<br/>会社<strong>__companyName</strong>の<strong>__creator</strong>でございます。<br/><br/>お電話でご相談させて頂きました、<strong>__meetingName</strong>に関するお打ち合わせの詳細を下記のリンクをご確認していただければと思います。<br/><br/> ■お打ち合わせの情報<br/>__url<br/><br/>なお、ご不明な点やご質問などございましたら、<strong>__creator</strong>連絡先までお問い合わせ頂けましたら幸甚でございます。',
+      },
+    },
+    confirmMeeting: {
+      en: {
+        subject: '【__meetingName】お打ち合わせのご依頼',
+        content: '<strong>__customer</strong>様、<br/><br/> いつもお世話になっております。<br/>会社<strong>__companyName</strong>の<strong>__creator</strong>でございます。<br/><br/>お電話でご相談させて頂きました、<strong>__meetingName</strong>に関するお打ち合わせの詳細を下記に記載致します。<br/><br/>■お打ち合わせの詳細<br/>会議コード：__meetingCode<br/>日時：__year年__month月__day日　__time時<br/>場所：__location<br/>チケットコード：__ticketCode<br/>弊社の担当者：__representative<br/>QRコード：__qrCode<br/><br/>なお、ご不明な点やご質問などございましたら、<br/><strong>__creator</strong>連絡先までお問い合わせ頂けましたら幸甚でございます。',
+      },
+      ja: {
+        subject: '【__meetingName】お打ち合わせのご依頼',
+        content: '<strong>__customer</strong>様、<br/><br/> いつもお世話になっております。<br/>会社<strong>__companyName</strong>の<strong>__creator</strong>でございます。<br/><br/>お電話でご相談させて頂きました、<strong>__meetingName</strong>に関するお打ち合わせの詳細を下記に記載致します。<br/><br/>■お打ち合わせの詳細<br/>会議コード：__meetingCode<br/>日時：__year年__month月__day日　__time時<br/>場所：__location<br/>チケットコード：__ticketCode<br/>弊社の担当者：__representative<br/>QRコード：__qrCode<br/><br/>なお、ご不明な点やご質問などございましたら、<br/><strong>__creator</strong>連絡先までお問い合わせ頂けましたら幸甚でございます。',
+      }
+    },
+    cancelMeeting: {
+      en: {
+        subject: '【__meetingName】お打ち合わせキャンセルのお詫び',
+        content: '<strong>__customer</strong>様、<br/><br/> いつもお世話になっております。<br/>会社<strong>__companyName</strong>の<strong>__creator</strong>でございます。<br/><br/> <strong>__meetingName</strong>に予約しましたが、<br/> 大変申し訳ございませんが、諸般の事情によりキャンセルさせて頂きたく、ご連絡いたしました。<br/>お忙しいところ恐れ入りますが、ご了承のほどよろしくお願い致します。',
+      },
+      ja: {
+        subject: '【__meetingName】お打ち合わせキャンセルのお詫び',
+        content: '<strong>__customer</strong>様、<br/><br/> いつもお世話になっております。<br/>会社<strong>__companyName</strong>の<strong>__creator</strong>でございます。<br/><br/> <strong>__meetingName</strong>に予約しましたが、<br/> 大変申し訳ございませんが、諸般の事情によりキャンセルさせて頂きたく、ご連絡いたしました。<br/>お忙しいところ恐れ入りますが、ご了承のほどよろしくお願い致します。',
+      }
+    },
+    detectedGuest: {
+      en: {
+        subject: '【__meetingName】【緊急】お客様の来社のおしらせ！',
+        content: 'Urgent!　<br/>【__meetingName】Customer comming!<br/>―――――<br/><br/>緊急お知らせです！<br/>【__meetingName】のお客様が来社しました。',
+      },
+      ja: {
+        subject: '【__meetingName】【緊急】お客様の来社のおしらせ！',
+        content: 'Urgent!　<br/>【__meetingName】Customer comming!<br/>―――――<br/><br/>緊急お知らせです！<br/>【__meetingName】のお客様が来社しました。',
+      }
+    }
+  },
+  ruleLvl: {
+    root: [
+      'staff',
+      'super-admin'
+    ],
+    "super-admin": [
+      'staff'
+    ]
+  },
+  rules: {
+    'root': {
+      accessAll: true
+    },
+    'super-admin': {
+      accessAll: true
+    },
+    'staff': {
+      '/api/v1/members': {
+        actions: [],
+        needApplication: true
+      },
+      '/api/v1/users': {
+        actions: [
+          '/get',
+          '/update',
+          '/auth',
+          '/list',
+          '/change-password'
+        ],
+        needApplication: true
+      },
+      '/api/v1/actions': {
+        actions: [
+          '/list'
+        ]
+      },
+      '/api/v1/applications': {
+        actions: [
+          '/list'
+        ],
+        needApplication: true
+      },
+      '/api/v1/sensepasses': {
+        actions: [
+          '/list'
+        ],
+        needApplication: true
+      },
+      '/api/v1/rules': {
+        actions: [
+          '/list'
+        ],
+        needApplication: true
+      },
+    }
+  },
+  roles: {
+    root: {
+      "manage_user": {
+        "show": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "create": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "update": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "delete": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        }
+      },
+      "manage_meeting": {
+        "show": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "create": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "update": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "delete": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        }
+      }
+    },
+    "super-admin": {
+      "manage_user": {
+        "show": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "create": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "update": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "delete": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        }
+      },
+      "manage_meeting": {
+        "show": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "create": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "update": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "delete": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        }
+      }
+    },
+    staff: {
+      "manage_meeting": {
+        "show": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "create": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "update": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        },
+        "delete": {
+          "scopes": [
+          ],
+          "fullAccess": true
+        }
+      }
+    }
+  }
+}

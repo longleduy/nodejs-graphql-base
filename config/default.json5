@@ -1,0 +1,8 @@
+{
+  logger: {
+    debug_log_path: '/usr/app/logs/server-2/debug.log',
+    error_log_path: '/usr/app/logs/server-2/error.log',
+    log_service_name: 'smart-reception',
+    aws_log_type: 'EC2'
+  }
+}
