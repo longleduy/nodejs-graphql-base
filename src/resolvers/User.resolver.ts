@@ -28,7 +28,7 @@ class UserResolver {
   @UseMiddleware(LogAccess)
   @Mutation((returns) => UserInfo)
   async createUser(@Arg('userInput') userInput: UserInput, @Ctx() { req, res }: ContextInfo): Promise<UserInfo> {
-    const sess = req.session as ISession;
+    const session = req.session as ISession;
     const userData: IUserData = ConvertUtil.copyInterface(UserData, userInput);
     userData.password_no_hash = userData.password;
     userData.password = await SecureUtil.hashPassWordAsync(userData.password);
@@ -53,11 +53,11 @@ class UserResolver {
     const payload = new Payload();
     payload.username = userResult[0].username;
     const token = SecureUtil.generateToken(payload);
-    const sess = req.session as ISession;
+    const session = req.session as ISession;
     // @ts-ignore
-    sess._id = userResult[0]._id;
-    sess.username = userResult[0].username;
-    sess.token = token;
+    session._id = userResult[0]._id;
+    session.username = userResult[0].username;
+    session.token = token;
     const userInfo = new UserInfo();
     userInfo.token = token;
     return userInfo;

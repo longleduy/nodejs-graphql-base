@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import dotenv from 'dotenv';
 // Utils
 import MongoUtil from './utils/Mongo.util';
+import RedisUtil from './utils/Redis.util';
 
 dotenv.config();
 class App {
@@ -13,6 +14,7 @@ class App {
   constructor() {
     this.app = express();
     MongoUtil.connect();
+    RedisUtil.connect();
     this.config();
   }
 
@@ -21,12 +23,24 @@ class App {
     this.app.use(bodyParser.json({ limit: '50mb' }));
     this.app.use(urlencodedParser);
     this.app.use(helmet());
-    this.app.use(cors({
-      origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_ORIGIN : '*',
-      allowedHeaders: ['X-Requested-With', 'X-HTTP-Method-Override', 'Content-Type', 'Accept', 'Authorization', 'Content-Language', 'Accept-Language', 'Language'],
-      credentials: true,
-      methods: ['POST', 'GET'],
-    }));
+    this.app.use(
+      cors({
+        origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_ORIGIN : '*',
+        allowedHeaders: [
+          'X-Requested-With',
+          'X-HTTP-Method-Override',
+          'Content-Type',
+          'Accept',
+          'Authorization',
+          'Content-Language',
+          'Accept-Language',
+          'Language',
+        ],
+        credentials: true,
+        methods: ['POST', 'GET'],
+      }),
+    );
+    this.app.use(RedisUtil.redisSession);
     this.app.use(MongoUtil.mongoSession);
   }
 }
