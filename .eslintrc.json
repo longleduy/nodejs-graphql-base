@@ -1,35 +1,32 @@
 {
-    "env": {
-        "browser": true
-    },
-    "extends": [
-        "airbnb-typescript/base",
-        "plugin:@typescript-eslint/recommended"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "project": "./tsconfig.json"
-    },
-    "plugins": [
-        "@typescript-eslint"
-    ],
-    "rules": {
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/ban-types": "off",
-        "max-len": "off",
-        "prefer-rest-params": "off",
-        "no-async-promise-executor": "off",
-        "import/prefer-default-export": "off",
-        "class-methods-use-this": "off",
-        "no-eval": "off",
-        "no-plusplus": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off",
-        "object-curly-newline": "off",
-        "no-underscore-dangle": "off",
-        "@typescript-eslint/no-empty-interface": "off",
-        "no-return-await": "off"
-    }
+  "env": {
+    "browser": true
+  },
+  "extends": ["airbnb-typescript/base", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-types": "off",
+    "max-len": "off",
+    "prefer-rest-params": "off",
+    "no-async-promise-executor": "off",
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "no-eval": "off",
+    "no-plusplus": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "object-curly-newline": "off",
+    "no-underscore-dangle": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "no-return-await": "off",
+    "operator-linebreak": "off",
+    "max-classes-per-file": "off"
+  }
 }

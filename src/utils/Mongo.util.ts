@@ -12,7 +12,7 @@ class MongoUtil {
 
   projection = '-__v';
 
-  public connect(): void{
+  public connect(): void {
     const MONGODB_PATH: string | undefined = process.env.DOCKER_MODE as string === '1' ? process.env.MONGODB_PATH_DOCKER : process.env.MONGODB_PATH;
     let option: any = { useNewUrlParser: true, useUnifiedTopology: true };
     if (process.env.DOCKER_MODE as string === '1') {
@@ -33,7 +33,7 @@ class MongoUtil {
       mongoose.set('useFindAndModify', false);
       mongoose.set('useNewUrlParser', true);
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      process.env.MONGO_LOG === '1' && mongoose.set('debug', (collectionName:any, method: any, query: any, doc: any) => {
+      process.env.MONGO_LOG === '1' && mongoose.set('debug', (collectionName: any, method: any, query: any, doc: any) => {
         logger.info(`MONGODB: ${collectionName}.${method} ${JSON.stringify(query)} ${JSON.stringify(doc)}`);
       });
       mongoose.connect(MONGODB_PATH || '', option).then(() => {

@@ -37,11 +37,12 @@ const start = async () => {
   const apolloServer = new ApolloServer({
     schema,
     plugins: [BASIC_LOGGING],
-    context: async ({ req }) => {
+    context: async ({ req, res }) => {
       requestID = Math.random().toString(36).substring(7).toUpperCase() + Date.now().toString();
       const context = new ContextInfo();
       context.requestID = requestID;
       context.req = req;
+      context.res = res;
       return context;
     },
     formatError: (error) => {

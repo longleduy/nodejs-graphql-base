@@ -10,12 +10,17 @@ type Mutation {
 }
 
 type Query {
+  getProfile: UserDataResponse!
   query: String!
 }
 
 input SignInInput {
   password: String!
   username: String!
+}
+
+type UserDataResponse {
+  username: String
 }
 
 type UserInfo {

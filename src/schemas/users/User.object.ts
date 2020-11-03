@@ -9,4 +9,10 @@ class UserInfo {
   @Field({ nullable: true })
   token: string;
 }
-export { UserInfo };
+
+@ObjectType()
+class UserDataResponse {
+  @Field({ nullable: true })
+  username: string;
+}
+export { UserInfo, UserDataResponse };

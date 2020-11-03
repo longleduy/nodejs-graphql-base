@@ -3,13 +3,14 @@ import { Resolver, Query, UseMiddleware, Arg, Ctx, Mutation } from 'type-graphql
 import { errorConstant } from '../constants/index';
 // Middlewares
 import { LogAccess } from '../middlewares/Logger.middleware';
+import { AuthenticationMiddleware } from '../middlewares/Authentication.middleware';
 // Errors
 import CustomError from '../utils/errors/CustomError.error';
 // Utils
 import ConvertUtil from '../utils/Convert.util';
 import SecureUtil from '../utils/Secure.util';
 // Schemas
-import { UserInfo } from '../schemas/users/User.object';
+import { UserInfo, UserDataResponse } from '../schemas/users/User.object';
 import { UserInput, SignInInput } from '../schemas/users/User.input';
 // Controllers
 import UserController from '../controllers/User.controller';
@@ -24,8 +25,9 @@ Resolver();
 class UserResolver {
   userController = new UserController();
 
+  @UseMiddleware(LogAccess)
   @Mutation((returns) => UserInfo)
-  async createUser(@Arg('userInput') userInput: UserInput, @Ctx() { req }: ContextInfo): Promise<UserInfo> {
+  async createUser(@Arg('userInput') userInput: UserInput, @Ctx() { req, res }: ContextInfo): Promise<UserInfo> {
     const sess = req.session as ISession;
     const userData: IUserData = ConvertUtil.copyInterface(UserData, userInput);
     userData.password_no_hash = userData.password;
@@ -34,6 +36,7 @@ class UserResolver {
     return ConvertUtil.toGraphQlClass(UserInfo, userResult);
   }
 
+  @UseMiddleware(LogAccess)
   @Mutation((returns) => UserInfo)
   async signIn(@Arg('signInInput') signInInput: SignInInput, @Ctx() { req }: ContextInfo): Promise<UserInfo> {
     const iUserQuery: IUserQuery = {
@@ -49,7 +52,7 @@ class UserResolver {
     }
     const payload = new Payload();
     payload.username = userResult[0].username;
-    const token = await SecureUtil.generateToken(payload);
+    const token = SecureUtil.generateToken(payload);
     const sess = req.session as ISession;
     // @ts-ignore
     sess._id = userResult[0]._id;
@@ -58,6 +61,15 @@ class UserResolver {
     const userInfo = new UserInfo();
     userInfo.token = token;
     return userInfo;
+  }
+
+  @UseMiddleware(LogAccess, AuthenticationMiddleware)
+  @Query((returns) => UserDataResponse)
+  async getProfile(@Ctx() { req }: ContextInfo): Promise<UserData | null> {
+    const username: string = await SecureUtil.getUsernameFromToken(req);
+    const users: User[] | null = await this.userController.findUser({ username });
+    const user: IUserData | null = users ? users[0] : null;
+    return user;
   }
 }
 export { UserResolver };

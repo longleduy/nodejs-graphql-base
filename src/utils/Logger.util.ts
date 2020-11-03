@@ -12,7 +12,7 @@ class LoggerUtil {
     this.init();
   }
 
-  private init(): void{
+  private init(): void {
     const { combine, timestamp, printf } = winston.format;
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const myFormat = printf(({ level, message, timestamp }) => `${timestamp}: ${level.toUpperCase()}: ${message}`);
