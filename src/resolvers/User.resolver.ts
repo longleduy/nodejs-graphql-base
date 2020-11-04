@@ -3,19 +3,20 @@ import { Resolver, Query, UseMiddleware, Arg, Ctx, Mutation } from 'type-graphql
 import { errorConstant } from '../constants/index';
 // Middlewares
 import { LogAccess } from '../middlewares/Logger.middleware';
-import { AuthenticationMiddleware } from '../middlewares/Authentication.middleware';
+import { AuthenticationMiddleware } from '../middlewares/AuthenticationWithoutSession.middleware';
 // Errors
 import CustomError from '../utils/errors/CustomError.error';
 // Utils
 import ConvertUtil from '../utils/Convert.util';
 import SecureUtil from '../utils/Secure.util';
+import RedisUtil from '../utils/Redis.util';
 // Schemas
 import { UserInfo, UserDataResponse } from '../schemas/users/User.object';
 import { UserInput, SignInInput } from '../schemas/users/User.input';
 // Controllers
 import UserController from '../controllers/User.controller';
 // Models
-import { IUserData, IUserQuery, UserData } from '../models/users/IUser.model';
+import { IUserData, IUserQuery, UserData, IUserClientDataStore } from '../models/users/IUser.model';
 import { User } from '../models/users/User.model';
 import ContextInfo from '../models/Context.model';
 import Payload from '../models/Payload.model';
@@ -58,6 +59,14 @@ class UserResolver {
     session._id = userResult[0]._id;
     session.username = userResult[0].username;
     session.token = token;
+    const userClientData: IUserClientDataStore = {
+      // @ts-ignore
+      _id: userResult[0]._id,
+      username: userResult[0].username,
+      token: token,
+    };
+    const userClientId: string = SecureUtil.getUserClientId(req);
+    await RedisUtil.client.set(userClientId, JSON.stringify(userClientData));
     const userInfo = new UserInfo();
     userInfo.token = token;
     return userInfo;

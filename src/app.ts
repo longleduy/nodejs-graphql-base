@@ -3,11 +3,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+
+dotenv.config();
+
 // Utils
 import MongoUtil from './utils/Mongo.util';
 import RedisUtil from './utils/Redis.util';
-
-dotenv.config();
 class App {
   public app: express.Application;
 

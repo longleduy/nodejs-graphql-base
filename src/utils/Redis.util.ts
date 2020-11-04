@@ -1,5 +1,4 @@
 import Redis from 'ioredis';
-import dotenv from 'dotenv';
 import PromiseBluebird from 'bluebird';
 import redisConnect from 'connect-redis';
 import express from 'express';
@@ -11,9 +10,6 @@ import { msgConstant } from '../constants';
 // Errors
 import RequestTimeOutError from './errors/RequestTimeOutError.error';
 import Timeout = NodeJS.Timeout;
-
-dotenv.config();
-
 interface RedisRequestOption {
   throwError?: boolean;
   defaultResponse?: any;
