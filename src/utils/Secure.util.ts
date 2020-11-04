@@ -4,6 +4,8 @@ import { Request, Response } from 'express';
 import requestIp from 'request-ip';
 import DeviceDetector, { DeviceDetectorResult } from 'device-detector-js';
 import crypto from 'crypto';
+// Constants
+import msgConstant from '../constants/Message.constant';
 // Models
 import Payload from '../models/Payload.model';
 import { ISession } from '../models/ISession.model';
@@ -14,6 +16,7 @@ import {
   IClientOs,
   IUserClientDataStore,
 } from '../models/users/IUser.model';
+import { IRequest } from '../models/IRequest.model';
 // Utils
 import AuthenticationError from './errors/AuthenticationError.error';
 import RedisUtil from './Redis.util';
@@ -39,7 +42,7 @@ class SecureUtil {
       const payload: Payload = (await jwt.verify(token, process.env.JWT_SECRET_KEY as string)) as Payload;
       const isAuth: boolean = payload.username ? payload.username === sess.username && token === sess.token : false;
       if (!isAuth) {
-        throw Error();
+        throw Error(msgConstant.LOGIN);
       }
     } catch (e) {
       if (e.name !== 'TokenExpiredError') {
@@ -74,11 +77,11 @@ class SecureUtil {
     return hashUserClientData;
   }
 
-  public async verifyTokenWithoutSession(req: Request, res: Response): Promise<void> {
+  public async verifyTokenWithoutSession(req: IRequest, res: Response): Promise<void> {
     const userClientId = this.getUserClientId(req);
     const userClientDataString: string = await RedisUtil.client.get(userClientId);
     if (!userClientDataString) {
-      throw new Error('Please Login');
+      throw Error(msgConstant.LOGIN);
     }
     const userClientData: IUserClientDataStore = JSON.parse(userClientDataString);
     const token: string = req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : '';
@@ -88,8 +91,9 @@ class SecureUtil {
         ? payload.username === userClientData.username && token === userClientData.token
         : false;
       if (!isAuth) {
-        throw Error('Please Login');
+        throw Error(msgConstant.LOGIN);
       }
+      req = Object.assign(req, { remoteSession: userClientData });
     } catch (e) {
       if (e.name !== 'TokenExpiredError') {
         throw new AuthenticationError(e);
@@ -103,6 +107,7 @@ class SecureUtil {
         const newToken: string = this.generateToken(payload);
         userClientData.token = newToken;
         await RedisUtil.client.set(userClientId, JSON.stringify(userClientData));
+        req = Object.assign(req, { remoteSession: userClientData });
         res.set('Access-Control-Expose-Headers', 'x-refresh-token');
         res.set('x-refresh-token', newToken);
       } else {

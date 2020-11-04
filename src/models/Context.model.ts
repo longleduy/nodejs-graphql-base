@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { IRequest } from './IRequest.model';
 
 class ContextInfo {
   requestID: string;
 
-  req: Request;
+  req: IRequest;
 
   res: Response;
 }
