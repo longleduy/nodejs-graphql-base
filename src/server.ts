@@ -2,13 +2,13 @@ import 'regenerator-runtime/runtime';
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
+import { ApolloServerPluginUsageReporting } from 'apollo-server-core';
 import app from './app';
 // Utils
 import logger from './utils/Logger.util';
 import ErrorUtil from './utils/Error.util';
 // Resolvers
-import { UserResolver } from './resolvers/User.resolver';
-import { DefaultResolver } from './resolvers/Default.resolver';
+import rootResolver from './resolvers';
 // Models
 import ContextInfo from './models/Context.model';
 
@@ -20,7 +20,6 @@ const BASIC_LOGGING = {
     if (['mut', 'que', 'sub'].includes(query.substring(0, 3))) {
       logger.info(`REQUEST ${requestID} GRAPHQL ${requestContext.request.query}`);
       return {
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         parsingDidStart(requestContext: any) {
           logger.info(`REQUEST ${requestID} Parsing started!`);
         },
@@ -28,15 +27,21 @@ const BASIC_LOGGING = {
     }
   },
 };
+
 const start = async () => {
   const schema = await buildSchema({
-    resolvers: [DefaultResolver, UserResolver],
+    resolvers: rootResolver,
     emitSchemaFile: true,
   });
   let requestID: string;
   const apolloServer = new ApolloServer({
     schema,
-    plugins: [BASIC_LOGGING],
+    plugins: [
+      BASIC_LOGGING,
+      ApolloServerPluginUsageReporting({
+        sendVariableValues: { all: true },
+      }),
+    ],
     context: async ({ req, res }) => {
       requestID = Math.random().toString(36).substring(7).toUpperCase() + Date.now().toString();
       const context = new ContextInfo();
@@ -56,4 +61,7 @@ const start = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
   app.listen({ port: PORT });
 };
-start().then(() => { logger.info(`Apollo Server on ${process.env.HOST}`); });
+
+start().then(() => {
+  logger.info(`Apollo Server on ${process.env.HOST}`);
+});
