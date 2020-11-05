@@ -27,7 +27,6 @@ class App {
       credentials: true,
       methods: ['POST', 'GET'],
     }));
-    console.log(MongoUtil.mongoSession);
     this.app.use(MongoUtil.mongoSession);
   }
 }

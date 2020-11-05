@@ -3,7 +3,6 @@ import logger from '../utils/Logger.util';
 import ContextInfo from '../models/Context.model';
 
 export const LogAccess: MiddlewareFn = ({ context, info }, next) => {
-
   const listField: string[] = [];
   const { path } = info;
   const params: string[] = [];
@@ -19,7 +18,11 @@ export const LogAccess: MiddlewareFn = ({ context, info }, next) => {
       listField.push(data.name.value);
     }
   });
-  const logInfo = `REQUEST ${ctx.requestID} GRAPHQL_${path.typename?.toUpperCase()}: ${path.typename?.toLocaleLowerCase()}{${path.key}${params.length > 0 ? `(${params.join()})` : ''}{${listField.join()}}}`;
-  // logger.info(logInfo);
+  const logInfo = `REQUEST ${
+    ctx.requestID
+  } GRAPHQL_${path.typename?.toUpperCase()}: ${path.typename?.toLocaleLowerCase()}{${path.key}${
+    params.length > 0 ? `(${params.join()})` : ''
+  }{${listField.join()}}}`;
+  logger.info(logInfo);
   return next();
 };

@@ -19,17 +19,12 @@ class SecureUtil {
 
   public comparePassWordAsync = async (passWord: string, passWordHashed: string): Promise<boolean> => await bcrypt.compare(passWord, passWordHashed);
 
-  public async verifyToken(req: Request, res: Response, rule?: string[]): Promise<void> {
+  public async verifyToken(req: Request, res: Response): Promise<void> {
     const sess = req.session as ISession;
-    // @ts-ignore
     const token: string = req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : '';
     try {
       const payload: Payload = await jwt.verify(token, process.env.JWT_SECRET_KEY as string) as Payload;
-      // FIXME: Update logic verify
-      let isAuth = false;
-      if (payload.username) {
-        isAuth = payload.username === sess.username && token === sess.token;
-      }
+      const isAuth: boolean = payload.username ? payload.username === sess.username && token === sess.token : false;
       if (!isAuth) {
         throw Error();
       }
@@ -41,7 +36,7 @@ class SecureUtil {
         if (expTime < 60000 * 30 && info.username === sess.username && token === sess.token) {
           const payload: Payload = new Payload();
           payload.username = info.username;
-          const newToken: string = await this.generateToken(payload);
+          const newToken: string = this.generateToken(payload);
           sess.token = newToken;
           res.set('Access-Control-Expose-Headers', 'x-refresh-token');
           res.set('x-refresh-token', newToken);
@@ -51,6 +46,18 @@ class SecureUtil {
       } else {
         throw new AuthenticationError(e);
       }
+    }
+  }
+
+  public async getUsernameFromToken(req: Request): Promise<string> {
+    const token: string = req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : '';
+    try {
+      const payload: Payload = await jwt.verify(token, process.env.JWT_SECRET_KEY as string) as Payload;
+      const { username } = payload;
+      return username;
+    } catch (e) {
+      const payload: any = await jwt.decode(token);
+      return payload.username;
     }
   }
 }
