@@ -22,7 +22,7 @@ import ContextInfo from '../models/Context.model';
 import Payload from '../models/Payload.model';
 import { ISession } from '../models/ISession.model';
 
-Resolver();
+@Resolver()
 class UserResolver {
   userController = new UserController();
 

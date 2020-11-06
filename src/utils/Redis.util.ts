@@ -17,13 +17,11 @@ interface RedisRequestOption {
 
 class RedisUtil {
   clientSync!: Redis.Redis | Redis.Cluster;
-
   client: any;
-
   RedisStore: redisConnect.RedisStore;
-
   redisSession: express.RequestHandler;
-
+  publisherClient: any;
+  subscriberClient: any;
   constructor() {
     this.connect();
     this.client = PromiseBluebird.promisifyAll(this.clientSync);
@@ -44,8 +42,16 @@ class RedisUtil {
       const listRedisNode: any[] = JSON.parse(process.env.REDIS_CLUSTER_NODE as string);
       logger.info(listRedisNode);
       this.clientSync = new Redis.Cluster(listRedisNode);
+      this.publisherClient = this.clientSync;
+      this.subscriberClient = this.clientSync;
     } else {
       this.clientSync = new Redis({
+        port: parseInt(process.env.REDISDB_PORT as string, 10),
+        host: process.env.REDISDB_HOST,
+        password: process.env.REDIS_PASSWORD,
+      });
+      this.publisherClient = this.clientSync;
+      this.subscriberClient = new Redis({
         port: parseInt(process.env.REDISDB_PORT as string, 10),
         host: process.env.REDISDB_HOST,
         password: process.env.REDIS_PASSWORD,

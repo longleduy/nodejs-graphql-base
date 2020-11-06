@@ -1,12 +1,15 @@
 import 'regenerator-runtime/runtime';
 import 'reflect-metadata';
+import { createServer } from 'http';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { ApolloServerPluginUsageReporting } from 'apollo-server-core';
+import { RedisPubSub } from 'graphql-redis-subscriptions';
 import app from './app';
 // Utils
 import logger from './utils/Logger.util';
 import ErrorUtil from './utils/Error.util';
+import RedisUtil from './utils/Redis.util';
 // Resolvers
 import rootResolver from './resolvers';
 // Models
@@ -27,10 +30,15 @@ const BASIC_LOGGING = {
     }
   },
 };
+const pubSub = new RedisPubSub({
+  publisher: RedisUtil.publisherClient,
+  subscriber: RedisUtil.subscriberClient,
+});
 
 const start = async () => {
   const schema = await buildSchema({
     resolvers: rootResolver,
+    pubSub,
     emitSchemaFile: true,
   });
   let requestID: string;
@@ -59,7 +67,9 @@ const start = async () => {
     introspection: process.env.NODE_ENV !== 'production',
   });
   apolloServer.applyMiddleware({ app, cors: false });
-  app.listen({ port: PORT });
+  const httpServer = createServer(app);
+  apolloServer.installSubscriptionHandlers(httpServer);
+  httpServer.listen({ port: PORT });
 };
 
 start().then(() => {

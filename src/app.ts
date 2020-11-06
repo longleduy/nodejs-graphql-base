@@ -23,7 +23,9 @@ class App {
     const urlencodedParser = bodyParser.urlencoded({ limit: '50mb', extended: false });
     this.app.use(bodyParser.json({ limit: '50mb' }));
     this.app.use(urlencodedParser);
-    this.app.use(helmet());
+    if (process.env.NODE_ENV === 'production') {
+      this.app.use(helmet());
+    }
     this.app.use(
       cors({
         origin: process.env.NODE_ENV === 'production' ? process.env.CLIENT_ORIGIN : '*',
