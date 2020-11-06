@@ -12,11 +12,17 @@ type Mutation {
 type Query {
   getProfile: UserDataResponse!
   query: String!
+  queryForSubscription: String!
+  shortQuery: String!
 }
 
 input SignInInput {
   password: String!
   username: String!
+}
+
+type Subscription {
+  subscription: String!
 }
 
 type UserDataResponse {
