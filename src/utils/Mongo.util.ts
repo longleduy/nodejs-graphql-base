@@ -19,7 +19,7 @@ class MongoUtil {
     if ((process.env.DOCKER_MODE as string) === '1') {
       option = {
         auth: {
-          authSource: process.env.MONGDB_AUTH_SOURCE,
+          authSource: process.env.MONGODB_AUTH_SOURCE,
         },
         user: process.env.MONGODB_USER,
         pass: process.env.MONGODB_PASSWORD,
