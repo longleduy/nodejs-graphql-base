@@ -11,10 +11,42 @@ class UserQuery {
   username = '';
 }
 
-interface IUserData extends UserData {
+interface IUserData extends UserData {}
+
+interface IUserQuery extends UserQuery {}
+
+interface IClientBrowser {
+  type: string;
+  name: string;
+  version: string;
+  engine: string;
+  engineVersion: string;
 }
 
-interface IUserQuery extends UserQuery {
+interface IClientOs {
+  name: string;
+  version: string;
+  platform: string;
+}
+
+interface IClientDevice {
+  type: string;
+  brand: string;
+  model: string;
+}
+
+interface IUserClientData {
+  ip: string;
+  userAgent: string;
+  browser: IClientBrowser | null;
+  os: IClientOs | null;
+  device: IClientDevice | null;
+}
+
+interface IUserClientDataStore {
+  _id: string;
+  username: string;
+  token: string;
 }
 
 export {
@@ -22,4 +54,9 @@ export {
   IUserQuery,
   UserData,
   UserQuery,
+  IUserClientData,
+  IClientBrowser,
+  IClientDevice,
+  IClientOs,
+  IUserClientDataStore,
 };

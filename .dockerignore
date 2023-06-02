@@ -1,0 +1,21 @@
+# Docker
+.docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Git & Github
+.git
+.gitignore
+.github
+
+# Dependencies
+node_modules
+package-lock.json
+yarn.lock
+
+# Build output
+dist
+
+# Environment variables
+.env

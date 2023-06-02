@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    image: graphqlbase/node:v1
+    volumes:
+      - ./:/app
+    env_file:
+      - .env
+    ports:
+      - '${PORT}:${PORT}'
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mongo:4.4.1-bionic
+    volumes:
+      - .docker/data/db:/data/db
+    restart: unless-stopped
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - .docker/data/redis:/data
+    restart: unless-stopped
